@@ -1,0 +1,23 @@
+version: '3'
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: 'aixada'
+      MYSQL_USER: 'aixada'
+      MYSQL_PASSWORD: 'aixada'
+      MYSQL_DATABASE: 'aixada'
+    ports:
+      - 3306:3306
+  web:
+    build: .
+    volumes:
+      - ./:/var/www/html
+    environment:
+      APACHE_DOCUMENT_ROOT: /var/www/html
+    ports:
+      - 8000:80
+    depends_on:
+      - db
+volumes:
+  data:
