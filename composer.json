@@ -1,0 +1,13 @@
+{
+    "name": "santakadev/refactoring-legacy-php",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Daniel Santamaría",
+            "email": "santaka87@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^5.4 || ^7.0"
+    }
+}
