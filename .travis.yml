@@ -7,4 +7,6 @@ php:
   - '7.1'
   - '7.2'
   - '7.3'
+before_script:
+  - composer update
 script: find . -name "*.php" -type f -exec php -l {} \;
