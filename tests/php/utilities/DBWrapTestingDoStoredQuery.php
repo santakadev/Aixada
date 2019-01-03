@@ -1,5 +1,7 @@
 <?php
 
+require_once(__DIR__.'/../../../php/inc/database.php');
+
 final class DBWrapTestingDoStoredQuery extends DBWrap
 {
     private $executedQuery;
