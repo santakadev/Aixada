@@ -83,7 +83,15 @@ class DBWrap {
       self::$instance = new DBWrap;
     return self::$instance;
   }
-  
+
+    /**
+     * @param $instance
+     */
+  public static function TEST_set_instance($instance)
+  {
+      self::$instance = $instance;
+  }
+
   /**
    * Executes a start_transaction (uses mysql "START TRANSACTION")
    */
