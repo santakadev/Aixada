@@ -9,6 +9,64 @@ function do_stored_query()
 {
     $functionCallArguments = func_get_args();
     $storedQueryArguments = prepare_stored_query_arguments($functionCallArguments);
+
+    if ($storedQueryArguments[0] === 'new_user_member') {
+
+        $database = DBWrap::get_instance();
+        $database->start_transaction();
+
+        $result = DBWrap::get_instance()->Select('max(id)+1 AS newId', 'aixada_user', 'id < 1000', '');
+        $newId = $result->fetch_object()->newId;
+
+        $database->Insert([
+            'table' => 'aixada_member',
+            'id' => $newId,
+            'uf_id' => 1,
+            'custom_member_ref' => 'custom_ref',
+            'name' => 'name',
+            'nif' => 'nif',
+            'address' => 'address',
+            'city' => 'city',
+            'zip' => 'zip',
+            'phone1' => 'phone1',
+            'phone2' => 'phone2',
+            'web' => 'web',
+            'notes' => 'notes',
+            'active' => 1,
+            'participant' => 1,
+            'adult' => 1,
+        ]);
+
+        $database->Insert([
+            'table' => 'aixada_user',
+            'id' => $newId,
+            'login' => 'login',
+            'password' => 'password',
+            'uf_id' => 1,
+            'member_id' => $newId,
+            'language' => 'es',
+            'gui_theme' => 'gui_theme',
+            'email' => 'email',
+            'created_on' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
+        ]);
+
+        $database->Insert([
+            'table' => 'aixada_user_role',
+            'user_id' => $newId,
+            'role' => 'Checkout',
+        ]);
+
+        $database->Insert([
+            'table' => 'aixada_user_role',
+            'user_id' => $newId,
+            'role' => 'Consumer',
+        ]);
+
+        $database->commit();
+        return null;
+    }
+
+
     $strSQL = prepare_stored_query($storedQueryArguments);
     return DBWrap::get_instance()->do_stored_query($strSQL);
 }

@@ -4,6 +4,7 @@ define('DS', DIRECTORY_SEPARATOR);
 define('__ROOT__', dirname(dirname(dirname(dirname(__FILE__)))).DS);
 
 require_once(__DIR__.'/../../../php/inc/database.php');
+require_once(__DIR__.'/../../../php/inc/adminDatabase.php');
 require_once(__DIR__.'/../../local_config/configuration_vars_test.php');
 
 final class new_user_member_test extends \PHPUnit\Framework\TestCase
@@ -11,11 +12,21 @@ final class new_user_member_test extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         configuration_vars::TEST_set_test_instance(new configuration_vars_test());
-    }
 
-    protected function tearDown()
-    {
-        do_stored_query('del_user_member', 2);
+        $db = connect_by_mysqli(
+            get_config('db_host'),
+            null,
+            get_config('db_user'),
+            get_config('db_password')
+        );
+        $db->query('DROP SCHEMA aixada');
+        $db->query('CREATE SCHEMA aixada');
+        $db->query('USE aixada');
+        execute_sql_files($db, 'sql/', array(
+            'aixada.sql',
+            'setup/aixada_insert_defaults.sql',
+            'setup/aixada_insert_default_user.sql'
+        ));
     }
 
     public function test_new_user_member()
@@ -69,6 +80,7 @@ final class new_user_member_test extends \PHPUnit\Framework\TestCase
         $this->assertSame('1', $newMemberRow['active']);
         $this->assertSame('1', $newMemberRow['participant']);
         $this->assertSame('1', $newMemberRow['adult']);
+        $this->assertNotNull($newMemberRow['ts']);
         $this->assertLessThanOrEqual((int)date('U'), (new \DateTimeImmutable($newMemberRow['ts']))->getTimestamp());
 
         // Assert aixada_user
@@ -86,6 +98,7 @@ final class new_user_member_test extends \PHPUnit\Framework\TestCase
         $this->assertSame('gui_theme', $newUserRow['gui_theme']);
         $this->assertNull($newUserRow['last_login_attempt']);
         $this->assertNull($newUserRow['last_successful_login']);
+        $this->assertNotNull($newUserRow['created_on']);
         $this->assertLessThanOrEqual((int)date('U'), (new \DateTimeImmutable($newUserRow['created_on']))->getTimestamp());
 
         // Assert aixada_user_role

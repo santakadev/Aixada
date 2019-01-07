@@ -479,6 +479,7 @@ commit;";
    * <b>There is a security leak in the WHERE clause.</b>
    * @param int $page the page requested by jqGrid
    * @param int $limit the number of rows in the grid
+   * @return mysqli_result
    */
 
   public function Select($fields, $table_name, $filter, $order_by, $order_sense='asc', $page=-1, $limit=-1)
