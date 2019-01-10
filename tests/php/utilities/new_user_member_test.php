@@ -40,47 +40,17 @@ final class new_user_member_test extends \PHPUnit\Framework\TestCase
         // Assert aixada_member
         $result = DBWrap::get_instance()->Select('*', 'aixada_member', '', '');
         $rows = $result->fetch_all(MYSQLI_ASSOC);
-        $newMemberRow = end($rows);
         $this->assertCount(2, $rows);
-        $this->assertEquals($maxId + 1, $newMemberRow['id']);
-        $this->assertSame($newUserMemberArguments->custom_member_ref(), $newMemberRow['custom_member_ref']);
-        $this->assertEquals($newUserMemberArguments->familyUnitId(), $newMemberRow['uf_id']);
-        $this->assertSame($newUserMemberArguments->memberName(), $newMemberRow['name']);
-        $this->assertSame($newUserMemberArguments->address(), $newMemberRow['address']);
-        $this->assertSame($newUserMemberArguments->nif(), $newMemberRow['nif']);
-        $this->assertSame($newUserMemberArguments->zip(), $newMemberRow['zip']);
-        $this->assertSame($newUserMemberArguments->city(), $newMemberRow['city']);
-        $this->assertSame($newUserMemberArguments->phone1(), $newMemberRow['phone1']);
-        $this->assertSame($newUserMemberArguments->phone2(), $newMemberRow['phone2']);
-        $this->assertSame($newUserMemberArguments->web(), $newMemberRow['web']);
-        $this->assertNull($newMemberRow['bank_name']);
-        $this->assertNull($newMemberRow['bank_account']);
-        $this->assertNull($newMemberRow['picture']);
-        $this->assertSame($newUserMemberArguments->notes(), $newMemberRow['notes']);
-        $this->assertEquals($newUserMemberArguments->active(), (bool)$newMemberRow['active']);
-        $this->assertEquals($newUserMemberArguments->adult(), (bool)$newMemberRow['participant']);
-        $this->assertEquals($newUserMemberArguments->participant(), (bool)$newMemberRow['adult']);
-        $this->assertNotNull($newMemberRow['ts']);
-        $this->assertLessThanOrEqual((int)date('U'), (new \DateTimeImmutable($newMemberRow['ts']))->getTimestamp());
+        $newMemberRow = end($rows);
+        $expectedId = $maxId + 1;
+        $this->assertValidMemberRow($expectedId, $newMemberRow, $newUserMemberArguments);
 
         // Assert aixada_user
         $result = DBWrap::get_instance()->Select('*', 'aixada_user', '', '');
         $rows = $result->fetch_all(MYSQLI_ASSOC);
-        $newUserRow = end($rows);
         $this->assertCount(2, $rows);
-        $this->assertSame('2', $newUserRow['id']);
-        $this->assertSame($newUserMemberArguments->username(), $newUserRow['login']);
-        $this->assertSame($newUserMemberArguments->password(), $newUserRow['password']);
-        $this->assertSame($newUserMemberArguments->email(), $newUserRow['email']);
-        $this->assertEquals($newUserMemberArguments->familyUnitId(), $newUserRow['uf_id']);
-        $this->assertSame('2', $newUserRow['member_id']);
-        $this->assertNull($newUserRow['provider_id']);
-        $this->assertSame($newUserMemberArguments->language(), $newUserRow['language']);
-        $this->assertSame($newUserMemberArguments->guiTheme(), $newUserRow['gui_theme']);
-        $this->assertNull($newUserRow['last_login_attempt']);
-        $this->assertNull($newUserRow['last_successful_login']);
-        $this->assertNotNull($newUserRow['created_on']);
-        $this->assertLessThanOrEqual((int)date('U'), (new \DateTimeImmutable($newUserRow['created_on']))->getTimestamp());
+        $newUserRow = end($rows);
+        $this->assertValidUserRow($expectedId, $newUserRow, $newUserMemberArguments);
 
         // Assert aixada_user_role
         $result = DBWrap::get_instance()->Select('*', 'aixada_user_role', 'user_id = 2', '');
@@ -114,6 +84,59 @@ final class new_user_member_test extends \PHPUnit\Framework\TestCase
             $newUserMemberArguments->guiTheme(),          // gui_theme    string(50),
             $newUserMemberArguments->email()              // email        string(100),
         );
+    }
+
+    /**
+     * @param $expectedId
+     * @param $newMemberRow
+     * @param NewUserMemberArguments $newUserMemberArguments
+     * @throws Exception
+     */
+    public function assertValidMemberRow($expectedId, $newMemberRow, NewUserMemberArguments $newUserMemberArguments)
+    {
+        $this->assertEquals($expectedId, $newMemberRow['id']);
+        $this->assertSame($newUserMemberArguments->custom_member_ref(), $newMemberRow['custom_member_ref']);
+        $this->assertEquals($newUserMemberArguments->familyUnitId(), $newMemberRow['uf_id']);
+        $this->assertSame($newUserMemberArguments->memberName(), $newMemberRow['name']);
+        $this->assertSame($newUserMemberArguments->address(), $newMemberRow['address']);
+        $this->assertSame($newUserMemberArguments->nif(), $newMemberRow['nif']);
+        $this->assertSame($newUserMemberArguments->zip(), $newMemberRow['zip']);
+        $this->assertSame($newUserMemberArguments->city(), $newMemberRow['city']);
+        $this->assertSame($newUserMemberArguments->phone1(), $newMemberRow['phone1']);
+        $this->assertSame($newUserMemberArguments->phone2(), $newMemberRow['phone2']);
+        $this->assertSame($newUserMemberArguments->web(), $newMemberRow['web']);
+        $this->assertNull($newMemberRow['bank_name']);
+        $this->assertNull($newMemberRow['bank_account']);
+        $this->assertNull($newMemberRow['picture']);
+        $this->assertSame($newUserMemberArguments->notes(), $newMemberRow['notes']);
+        $this->assertEquals($newUserMemberArguments->active(), (bool)$newMemberRow['active']);
+        $this->assertEquals($newUserMemberArguments->adult(), (bool)$newMemberRow['participant']);
+        $this->assertEquals($newUserMemberArguments->participant(), (bool)$newMemberRow['adult']);
+        $this->assertNotNull($newMemberRow['ts']);
+        $this->assertLessThanOrEqual((int)date('U'), (new \DateTimeImmutable($newMemberRow['ts']))->getTimestamp());
+    }
+
+    /**
+     * @param $expectedId
+     * @param $newUserRow
+     * @param NewUserMemberArguments $newUserMemberArguments
+     * @throws Exception
+     */
+    public function assertValidUserRow($expectedId, $newUserRow, NewUserMemberArguments $newUserMemberArguments)
+    {
+        $this->assertEquals($expectedId, $newUserRow['id']);
+        $this->assertSame($newUserMemberArguments->username(), $newUserRow['login']);
+        $this->assertSame($newUserMemberArguments->password(), $newUserRow['password']);
+        $this->assertSame($newUserMemberArguments->email(), $newUserRow['email']);
+        $this->assertEquals($newUserMemberArguments->familyUnitId(), $newUserRow['uf_id']);
+        $this->assertEquals($expectedId, $newUserRow['member_id']);
+        $this->assertNull($newUserRow['provider_id']);
+        $this->assertSame($newUserMemberArguments->language(), $newUserRow['language']);
+        $this->assertSame($newUserMemberArguments->guiTheme(), $newUserRow['gui_theme']);
+        $this->assertNull($newUserRow['last_login_attempt']);
+        $this->assertNull($newUserRow['last_successful_login']);
+        $this->assertNotNull($newUserRow['created_on']);
+        $this->assertLessThanOrEqual((int)date('U'), (new \DateTimeImmutable($newUserRow['created_on']))->getTimestamp());
     }
 }
 
