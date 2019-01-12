@@ -1,5 +1,9 @@
 <?php
 
+require_once __ROOT__ . 'src/UseCase/CreateMember.php';
+
+use Aixada\UseCase\CreateMember;
+
 /**
  * Execute a stored query
  * @param array $args the arguments to be passed to the stored query; possibly empty
@@ -11,58 +15,7 @@ function do_stored_query()
     $storedQueryArguments = prepare_stored_query_arguments($functionCallArguments);
 
     if ($storedQueryArguments[0] === 'new_user_member') {
-
-        $database = DBWrap::get_instance();
-        $database->start_transaction();
-
-        $result = DBWrap::get_instance()->Select('max(id)+1 AS newId', 'aixada_user', 'id < 1000', '');
-        $newId = $result->fetch_object()->newId;
-
-        $database->Insert([
-            'table' => 'aixada_member',
-            'id' => $newId,
-            'uf_id' => $storedQueryArguments[3],
-            'custom_member_ref' => $storedQueryArguments[4],
-            'name' => $storedQueryArguments[5],
-            'nif' => $storedQueryArguments[6],
-            'address' => $storedQueryArguments[7],
-            'city' => $storedQueryArguments[8],
-            'zip' => $storedQueryArguments[9],
-            'phone1' => $storedQueryArguments[10],
-            'phone2' => $storedQueryArguments[11],
-            'web' => $storedQueryArguments[12],
-            'notes' => $storedQueryArguments[13],
-            'active' => $storedQueryArguments[14],
-            'participant' => $storedQueryArguments[15],
-            'adult' => $storedQueryArguments[16],
-        ]);
-
-        $database->Insert([
-            'table' => 'aixada_user',
-            'id' => $newId,
-            'login' => $storedQueryArguments[1],
-            'password' => $storedQueryArguments[2],
-            'uf_id' => $storedQueryArguments[3],
-            'member_id' => $newId,
-            'language' => $storedQueryArguments[17],
-            'gui_theme' => $storedQueryArguments[18],
-            'email' => $storedQueryArguments[19],
-            'created_on' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
-        ]);
-
-        $database->Insert([
-            'table' => 'aixada_user_role',
-            'user_id' => $newId,
-            'role' => 'Checkout',
-        ]);
-
-        $database->Insert([
-            'table' => 'aixada_user_role',
-            'user_id' => $newId,
-            'role' => 'Consumer',
-        ]);
-
-        $database->commit();
+        (new CreateMember())->__invoke($storedQueryArguments);
         return null;
     }
 
