@@ -21,7 +21,7 @@ function do_stored_query()
         $database->Insert([
             'table' => 'aixada_member',
             'id' => $newId,
-            'uf_id' => 1,
+            'uf_id' => $storedQueryArguments[3],
             'custom_member_ref' => $storedQueryArguments[4],
             'name' => $storedQueryArguments[5],
             'nif' => $storedQueryArguments[6],
@@ -42,7 +42,7 @@ function do_stored_query()
             'id' => $newId,
             'login' => $storedQueryArguments[1],
             'password' => $storedQueryArguments[2],
-            'uf_id' => 1,
+            'uf_id' => $storedQueryArguments[3],
             'member_id' => $newId,
             'language' => $storedQueryArguments[17],
             'gui_theme' => $storedQueryArguments[18],

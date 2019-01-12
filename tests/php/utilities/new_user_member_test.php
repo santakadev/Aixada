@@ -9,24 +9,16 @@ require_once(__DIR__.'/../../local_config/configuration_vars_test.php');
 
 final class new_user_member_test extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var mysqli
+     */
+    private $db;
+
     protected function setUp()
     {
         configuration_vars::TEST_set_test_instance(new configuration_vars_test());
-
-        $db = connect_by_mysqli(
-            get_config('db_host'),
-            null,
-            get_config('db_user'),
-            get_config('db_password')
-        );
-        $db->query('DROP SCHEMA aixada');
-        $db->query('CREATE SCHEMA aixada');
-        $db->query('USE aixada');
-        execute_sql_files($db, 'sql/', array(
-            'aixada.sql',
-            'setup/aixada_insert_defaults.sql',
-            'setup/aixada_insert_default_user.sql'
-        ));
+        $this->initializeDefaultDatabase();
+        $this->createFamilyUnitWithId(2);
     }
 
     /** @test */
@@ -36,8 +28,7 @@ final class new_user_member_test extends \PHPUnit\Framework\TestCase
         $initialDatabaseMaxId = $result->fetch_object()->max_id;
 
         $aNewMember = NewUserMemberArguments::anyOfFamilyUnit(FamilyUnitIdStub::ofId(1));
-        // TODO: Add this second member to other family unit
-        $anotherNewMember = NewUserMemberArguments::anyOfFamilyUnit(FamilyUnitIdStub::ofId(1));
+        $anotherNewMember = NewUserMemberArguments::anyOfFamilyUnit(FamilyUnitIdStub::ofId(2));
         $this->addNewUserMember($aNewMember);
         $this->addNewUserMember($anotherNewMember);
 
@@ -154,6 +145,33 @@ final class new_user_member_test extends \PHPUnit\Framework\TestCase
         $this->assertNull($userRow['last_successful_login']);
         $this->assertNotNull($userRow['created_on']);
         $this->assertLessThanOrEqual((int)date('U'), (new \DateTimeImmutable($userRow['created_on']))->getTimestamp());
+    }
+
+    private function initializeDefaultDatabase()
+    {
+        $this->db = connect_by_mysqli(
+            get_config('db_host'),
+            null,
+            get_config('db_user'),
+            get_config('db_password')
+        );
+        $this->db->query('DROP SCHEMA aixada');
+        $this->db->query('CREATE SCHEMA aixada');
+        $this->db->query('USE aixada');
+        execute_sql_files($this->db, 'sql/', array(
+            'aixada.sql',
+            'setup/aixada_queries_all.sql',
+            'setup/aixada_insert_defaults.sql',
+            'setup/aixada_insert_default_user.sql'
+        ));
+        $this->db->query('USE aixada');
+    }
+
+    private function createFamilyUnitWithId($familyUnitId)
+    {
+        $statament = $this->db->prepare('CALL create_uf("family unit 2", ?, 1)');
+        $statament->bind_param('i', $familyUnitId);
+        $statament->execute();
     }
 }
 
