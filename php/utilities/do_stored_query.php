@@ -14,14 +14,14 @@ function do_stored_query()
     $functionCallArguments = func_get_args();
     $storedQueryArguments = prepare_stored_query_arguments($functionCallArguments);
 
-    if ($storedQueryArguments[0] === 'new_user_member') {
-        (new CreateMember())->__invoke($storedQueryArguments);
-        return null;
+    switch ($storedQueryArguments[0]) {
+        case 'new_user_member':
+            (new CreateMember())->__invoke($storedQueryArguments);
+            break;
+        default:
+            $strSQL = prepare_stored_query($storedQueryArguments);
+            return DBWrap::get_instance()->do_stored_query($strSQL);
     }
-
-
-    $strSQL = prepare_stored_query($storedQueryArguments);
-    return DBWrap::get_instance()->do_stored_query($strSQL);
 }
 
 /**
