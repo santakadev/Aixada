@@ -20,6 +20,11 @@ final class User
     private $password;
 
     /**
+     * @var string[]
+     */
+    private $roles;
+
+    /**
      * @var int
      */
     private $familyUnitId;
@@ -54,6 +59,7 @@ final class User
      * @param int $id
      * @param string $login
      * @param string $password
+     * @param string[] $roles
      * @param int $familyUnitId
      * @param int $memberId
      * @param string $language
@@ -61,11 +67,12 @@ final class User
      * @param string $email
      * @param \DateTimeImmutable $createdOn
      */
-    public function __construct($id, $login, $password, $familyUnitId, $memberId, $language, $guiTheme, $email, \DateTimeImmutable $createdOn)
+    public function __construct($id, $login, $password, $roles, $familyUnitId, $memberId, $language, $guiTheme, $email, \DateTimeImmutable $createdOn)
     {
         $this->id = $id;
         $this->login = $login;
         $this->password = $password;
+        $this->roles = $roles;
         $this->familyUnitId = $familyUnitId;
         $this->memberId = $memberId;
         $this->language = $language;
@@ -96,6 +103,14 @@ final class User
     public function password()
     {
         return $this->password;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function roles()
+    {
+        return $this->roles;
     }
 
     /**

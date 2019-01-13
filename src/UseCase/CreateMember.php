@@ -46,17 +46,6 @@ final class CreateMember
 
         $this->users->save($this->userFromArguments($arguments, $newId));
 
-        $database->Insert([
-            'table' => 'aixada_user_role',
-            'user_id' => $newId,
-            'role' => 'Checkout',
-        ]);
-
-        $database->Insert([
-            'table' => 'aixada_user_role',
-            'user_id' => $newId,
-            'role' => 'Consumer',
-        ]);
 
         $database->commit();
     }
@@ -100,6 +89,7 @@ final class CreateMember
             $newId,
             $arguments[1],
             $arguments[2],
+            ['Checkout', 'Consumer'],
             $arguments[3],
             $newId,
             $arguments[17],

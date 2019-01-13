@@ -22,5 +22,13 @@ final class MySqlUserRepository
             'email' => $user->email(),
             'created_on' => $user->createdOn()->format('Y-m-d H:i:s')
         ]);
+
+        foreach ($user->roles() as $role) {
+            $connection->Insert([
+                'table' => 'aixada_user_role',
+                'user_id' => $user->id(),
+                'role' => $role,
+            ]);
+        }
     }
 }
