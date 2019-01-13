@@ -753,5 +753,10 @@ class configuration_vars {
         self::$instance = new configuration_vars();
     return self::$instance;
   }
+
+  public static function TEST_set_test_instance($instance)
+  {
+    self::$instance = $instance;
+  }
 };
 ?>
