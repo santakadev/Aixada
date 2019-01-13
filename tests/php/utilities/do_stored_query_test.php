@@ -1,8 +1,5 @@
 <?php
 
-define('DS', DIRECTORY_SEPARATOR);
-define('__ROOT__', dirname(dirname(dirname(dirname(__FILE__)))).DS);
-
 require_once(__DIR__.'/../../../php/utilities/do_stored_query.php');
 require_once(__DIR__.'/DBWrapTestingDoStoredQuery.php');
 

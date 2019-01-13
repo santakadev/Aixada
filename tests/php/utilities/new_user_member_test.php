@@ -1,8 +1,5 @@
 <?php
 
-define('DS', DIRECTORY_SEPARATOR);
-define('__ROOT__', dirname(dirname(dirname(dirname(__FILE__)))).DS);
-
 require_once(__DIR__.'/../../../php/inc/database.php');
 require_once(__DIR__.'/../../../php/inc/adminDatabase.php');
 require_once(__DIR__.'/../../local_config/configuration_vars_test.php');
