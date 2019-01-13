@@ -56,13 +56,13 @@ final class CreateMember
 
     /**
      * @param $arguments
-     * @param $newId
+     * @param $id
      * @return Member
      */
-    public function memberFromArguments($arguments, $newId)
+    public function memberFromArguments($arguments, $id)
     {
-        $member = new Member(
-            $newId,
+        return new Member(
+            $id,
             $arguments[3],
             $arguments[4],
             $arguments[5],
@@ -78,29 +78,44 @@ final class CreateMember
             $arguments[15],
             $arguments[16]
         );
-        return $member;
     }
 
     /**
      * @param $arguments
-     * @param $newId
+     * @param $id
      * @return User
      * @throws \Exception
      */
-    public function userFromArguments($arguments, $newId)
+    public function userFromArguments($arguments, $id)
     {
-        $user = new User(
-            $newId,
+        return new User(
+            $id,
             $arguments[1],
             $arguments[2],
-            ['Checkout', 'Consumer'],
+            $this->defaultRoles(),
             $arguments[3],
-            $newId,
+            $id,
             $arguments[17],
             $arguments[18],
             $arguments[19],
-            new \DateTimeImmutable()
+            $this->now()
         );
-        return $user;
+    }
+
+    /**
+     * @return array
+     */
+    public function defaultRoles()
+    {
+        return ['Checkout', 'Consumer'];
+    }
+
+    /**
+     * @return \DateTimeImmutable
+     * @throws \Exception
+     */
+    public function now()
+    {
+        return new \DateTimeImmutable();
     }
 }
