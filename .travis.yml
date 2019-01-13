@@ -1,4 +1,5 @@
 language: php
+
 php:
   - '5.4'
   - '5.5'
@@ -7,6 +8,13 @@ php:
   - '7.1'
   - '7.2'
   - '7.3'
+
+services:
+  - mysql
+
 before_script:
+  - mysql -e "CREATE USER 'aixada'@'localhost' IDENTIFIED BY 'aixada';" -uroot
+  - mysql -e "GRANT ALL PRIVILEGES ON aixada.* TO 'aixada'@'localhost';" -uroot
+  - find . -name "*.php" -type f -exec php -l {} \;
   - composer update
-script: find . -name "*.php" -type f -exec php -l {} \;
+  - cp local_config/config.php.sample local_config/config.php
