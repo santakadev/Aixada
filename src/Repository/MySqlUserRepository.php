@@ -2,24 +2,25 @@
 
 namespace Aixada\Repository;
 
+use Aixada\Entity\User;
 use DBWrap;
 
 final class MySqlUserRepository
 {
-    public function save($id, $arguments)
+    public function save(User $user)
     {
         $connection = DBWrap::get_instance();
         $connection->Insert([
             'table' => 'aixada_user',
-            'id' => $id,
-            'login' => $arguments[1],
-            'password' => $arguments[2],
-            'uf_id' => $arguments[3],
-            'member_id' => $id,
-            'language' => $arguments[17],
-            'gui_theme' => $arguments[18],
-            'email' => $arguments[19],
-            'created_on' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
+            'id' => $user->id(),
+            'login' => $user->login(),
+            'password' => $user->password(),
+            'uf_id' => $user->familyUnitId(),
+            'member_id' => $user->memberId(),
+            'language' => $user->language(),
+            'gui_theme' => $user->guiTheme(),
+            'email' => $user->email(),
+            'created_on' => $user->createdOn()->format('Y-m-d H:i:s')
         ]);
     }
 }
