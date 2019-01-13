@@ -16,6 +16,22 @@ use DBWrap;
 final class CreateMember
 {
     /**
+     * @var MySqlMemberRepository
+     */
+    private $members;
+
+    /**
+     * @var MySqlUserRepository
+     */
+    private $users;
+
+    public function __construct()
+    {
+        $this->members = new MySqlMemberRepository();
+        $this->users = new MySqlUserRepository();
+    }
+
+    /**
      * @param array $arguments
      * @throws \InternalException
      */
@@ -24,11 +40,11 @@ final class CreateMember
         $database = DBWrap::get_instance();
         $database->start_transaction();
 
-        $newId = (new MySqlMemberRepository())->nextId();
+        $newId = $this->members->nextId();
 
-        (new MySqlMemberRepository())->save($this->memberFromArguments($arguments, $newId));
+        $this->members->save($this->memberFromArguments($arguments, $newId));
 
-        (new MySqlUserRepository())->save($this->userFromArguments($arguments, $newId));
+        $this->users->save($this->userFromArguments($arguments, $newId));
 
         $database->Insert([
             'table' => 'aixada_user_role',
