@@ -25,20 +25,25 @@ final class CreateMember
      */
     private $users;
 
+    /**
+     * @var DBWrap
+     */
+    private $connection;
+
     public function __construct()
     {
         $this->members = new MySqlMemberRepository();
         $this->users = new MySqlUserRepository();
+        $this->connection = DBWrap::get_instance();
     }
 
     /**
      * @param array $arguments
-     * @throws \InternalException
+     * @throws \Exception
      */
     public function __invoke($arguments)
     {
-        $database = DBWrap::get_instance();
-        $database->start_transaction();
+        $this->connection->start_transaction();
 
         $newId = $this->members->nextId();
 
@@ -46,8 +51,7 @@ final class CreateMember
 
         $this->users->save($this->userFromArguments($arguments, $newId));
 
-
-        $database->commit();
+        $this->connection->commit();
     }
 
     /**
