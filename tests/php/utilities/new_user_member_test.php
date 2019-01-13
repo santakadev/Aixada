@@ -111,8 +111,8 @@ final class new_user_member_test extends \PHPUnit\Framework\TestCase
         $this->assertNull($memberRow['picture']);
         $this->assertSame($newUserMemberArguments->notes(), $memberRow['notes']);
         $this->assertEquals($newUserMemberArguments->active(), (bool)$memberRow['active']);
-        $this->assertEquals($newUserMemberArguments->adult(), (bool)$memberRow['participant']);
-        $this->assertEquals($newUserMemberArguments->participant(), (bool)$memberRow['adult']);
+        $this->assertEquals($newUserMemberArguments->adult(), (bool)$memberRow['adult']);
+        $this->assertEquals($newUserMemberArguments->participant(), (bool)$memberRow['participant']);
         $this->assertNotNull($memberRow['ts']);
         $this->assertLessThanOrEqual((int)date('U'), (new \DateTimeImmutable($memberRow['ts']))->getTimestamp());
     }
