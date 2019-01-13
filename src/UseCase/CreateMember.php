@@ -2,6 +2,9 @@
 
 namespace Aixada\UseCase;
 
+require_once __ROOT__ . 'src/Repository/MySqlMemberRepository.php';
+
+use Aixada\Repository\MySqlMemberRepository;
 use DBWrap;
 
 final class CreateMember
@@ -18,24 +21,8 @@ final class CreateMember
         $result = DBWrap::get_instance()->Select('max(id)+1 AS newId', 'aixada_user', 'id < 1000', '');
         $newId = $result->fetch_object()->newId;
 
-        $database->Insert([
-            'table' => 'aixada_member',
-            'id' => $newId,
-            'uf_id' => $arguments[3],
-            'custom_member_ref' => $arguments[4],
-            'name' => $arguments[5],
-            'nif' => $arguments[6],
-            'address' => $arguments[7],
-            'city' => $arguments[8],
-            'zip' => $arguments[9],
-            'phone1' => $arguments[10],
-            'phone2' => $arguments[11],
-            'web' => $arguments[12],
-            'notes' => $arguments[13],
-            'active' => $arguments[14],
-            'participant' => $arguments[15],
-            'adult' => $arguments[16],
-        ]);
+        $mySqlMemberRepository = new MySqlMemberRepository();
+        $mySqlMemberRepository->save($newId, $arguments);
 
         $database->Insert([
             'table' => 'aixada_user',
