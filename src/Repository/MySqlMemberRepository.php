@@ -29,4 +29,10 @@ final class MySqlMemberRepository
             'adult' => $member->adult(),
         ]);
     }
+
+    public function nextId()
+    {
+        $result = DBWrap::get_instance()->Select('max(id)+1 AS newId', 'aixada_user', 'id < 1000', '');
+        return $result->fetch_object()->newId;
+    }
 }

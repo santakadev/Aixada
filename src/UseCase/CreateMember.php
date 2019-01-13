@@ -24,8 +24,7 @@ final class CreateMember
         $database = DBWrap::get_instance();
         $database->start_transaction();
 
-        $result = DBWrap::get_instance()->Select('max(id)+1 AS newId', 'aixada_user', 'id < 1000', '');
-        $newId = $result->fetch_object()->newId;
+        $newId = (new MySqlMemberRepository())->nextId();
 
         (new MySqlMemberRepository())->save($this->memberFromArguments($arguments, $newId));
 
