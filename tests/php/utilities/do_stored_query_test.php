@@ -9,18 +9,31 @@ require_once(__DIR__.'/DBWrapTestingDoStoredQuery.php');
 final class do_stored_query_test extends \PHPUnit\Framework\TestCase
 {
     /**
+     * @var DBWrapTestingDoStoredQuery
+     */
+    private $db;
+
+    protected function setUp()
+    {
+        $this->db = new DBWrapTestingDoStoredQuery();
+        DBWrap::TEST_set_instance($this->db);
+    }
+
+    protected function tearDown()
+    {
+        DBWrap::TEST_set_instance(false);
+    }
+
+    /**
      * @dataProvider do_stored_query_data_provider
      * @param $arguments
      * @param $executedQuery
      */
     public function test_do_stored_query($arguments, $executedQuery)
     {
-        $testingDb = new DBWrapTestingDoStoredQuery();
-
-        DBWrap::TEST_set_instance($testingDb);
         do_stored_query($arguments);
 
-        $this->assertSame($executedQuery, $testingDb->executedQuery());
+        $this->assertSame($executedQuery, $this->db->executedQuery());
     }
 
     public function do_stored_query_data_provider()
