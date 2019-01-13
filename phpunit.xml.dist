@@ -11,6 +11,22 @@
         </testsuite>
     </testsuites>
 
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./</directory>
+            <exclude>
+                <directory>./tests</directory>
+                <directory>./vendor</directory>
+                <directory>./php/external</directory>
+                <directory>./css</directory>
+                <directory>./docs</directory>
+                <directory>./img</directory>
+                <directory>./js</directory>
+                <directory>./sql</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
     <php>
         <const name="DS" value="/"/>
     </php>
