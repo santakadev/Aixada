@@ -4,9 +4,11 @@ namespace Aixada\UseCase;
 
 require_once __ROOT__ . 'src/Entity/Member.php';
 require_once __ROOT__ . 'src/Repository/MySqlMemberRepository.php';
+require_once __ROOT__ . 'src/Repository/MySqlUserRepository.php';
 
 use Aixada\Entity\Member;
 use Aixada\Repository\MySqlMemberRepository;
+use Aixada\Repository\MySqlUserRepository;
 use DBWrap;
 
 final class CreateMember
@@ -25,18 +27,7 @@ final class CreateMember
 
         (new MySqlMemberRepository())->save($this->memberFromArguments($arguments, $newId));
 
-        $database->Insert([
-            'table' => 'aixada_user',
-            'id' => $newId,
-            'login' => $arguments[1],
-            'password' => $arguments[2],
-            'uf_id' => $arguments[3],
-            'member_id' => $newId,
-            'language' => $arguments[17],
-            'gui_theme' => $arguments[18],
-            'email' => $arguments[19],
-            'created_on' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
-        ]);
+        (new MySqlUserRepository())->save($newId, $arguments);
 
         $database->Insert([
             'table' => 'aixada_user_role',
