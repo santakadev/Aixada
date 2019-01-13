@@ -2,8 +2,10 @@
 
 namespace Aixada\UseCase;
 
+require_once __ROOT__ . 'src/Entity/Member.php';
 require_once __ROOT__ . 'src/Repository/MySqlMemberRepository.php';
 
+use Aixada\Entity\Member;
 use Aixada\Repository\MySqlMemberRepository;
 use DBWrap;
 
@@ -22,7 +24,25 @@ final class CreateMember
         $newId = $result->fetch_object()->newId;
 
         $mySqlMemberRepository = new MySqlMemberRepository();
-        $mySqlMemberRepository->save($newId, $arguments);
+        $member = new Member(
+            $newId,
+            $arguments[3],
+            $arguments[4],
+            $arguments[5],
+            $arguments[6],
+            $arguments[7],
+            $arguments[8],
+            $arguments[9],
+            $arguments[10],
+            $arguments[11],
+            $arguments[12],
+            $arguments[13],
+            $arguments[14],
+            $arguments[15],
+            $arguments[16]
+        );
+
+        $mySqlMemberRepository->save($member);
 
         $database->Insert([
             'table' => 'aixada_user',
