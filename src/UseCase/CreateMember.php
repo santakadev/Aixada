@@ -23,26 +23,7 @@ final class CreateMember
         $result = DBWrap::get_instance()->Select('max(id)+1 AS newId', 'aixada_user', 'id < 1000', '');
         $newId = $result->fetch_object()->newId;
 
-        $mySqlMemberRepository = new MySqlMemberRepository();
-        $member = new Member(
-            $newId,
-            $arguments[3],
-            $arguments[4],
-            $arguments[5],
-            $arguments[6],
-            $arguments[7],
-            $arguments[8],
-            $arguments[9],
-            $arguments[10],
-            $arguments[11],
-            $arguments[12],
-            $arguments[13],
-            $arguments[14],
-            $arguments[15],
-            $arguments[16]
-        );
-
-        $mySqlMemberRepository->save($member);
+        (new MySqlMemberRepository())->save($this->memberFromArguments($arguments, $newId));
 
         $database->Insert([
             'table' => 'aixada_user',
@@ -70,5 +51,32 @@ final class CreateMember
         ]);
 
         $database->commit();
+    }
+
+    /**
+     * @param $arguments
+     * @param $newId
+     * @return Member
+     */
+    public function memberFromArguments($arguments, $newId)
+    {
+        $member = new Member(
+            $newId,
+            $arguments[3],
+            $arguments[4],
+            $arguments[5],
+            $arguments[6],
+            $arguments[7],
+            $arguments[8],
+            $arguments[9],
+            $arguments[10],
+            $arguments[11],
+            $arguments[12],
+            $arguments[13],
+            $arguments[14],
+            $arguments[15],
+            $arguments[16]
+        );
+        return $member;
     }
 }
