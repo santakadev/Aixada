@@ -114,7 +114,7 @@ final class new_user_member_test extends \PHPUnit\Framework\TestCase
         $this->assertEquals($newUserMemberArguments->adult(), (bool)$memberRow['adult']);
         $this->assertEquals($newUserMemberArguments->participant(), (bool)$memberRow['participant']);
         $this->assertNotNull($memberRow['ts']);
-        $this->assertLessThanOrEqual((int)date('U'), (new \DateTimeImmutable($memberRow['ts']))->getTimestamp());
+        $this->assertGreaterThanOrEqual((int)date('U'), (new \DateTimeImmutable($memberRow['ts']))->getTimestamp());
     }
 
     /**
@@ -141,7 +141,7 @@ final class new_user_member_test extends \PHPUnit\Framework\TestCase
         $this->assertNull($userRow['last_login_attempt']);
         $this->assertNull($userRow['last_successful_login']);
         $this->assertNotNull($userRow['created_on']);
-        $this->assertLessThanOrEqual((int)date('U'), (new \DateTimeImmutable($userRow['created_on']))->getTimestamp());
+        $this->assertGreaterThanOrEqual((int)date('U'), (new \DateTimeImmutable($userRow['created_on']))->getTimestamp());
     }
 
     private function initializeDefaultDatabase()
