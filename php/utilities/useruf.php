@@ -85,7 +85,7 @@ function create_user_member($uf_id){
 	}
 }
 
-
+if (!defined('TEST')):
 function extract_user_form_values(){
 	
 	//login and pwd is ignored by update member calls. the '' assumes empty password 
@@ -119,7 +119,7 @@ function extract_user_form_values(){
 	return $fields;
 	
 }
-
+endif;
 
 /**
  * 

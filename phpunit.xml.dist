@@ -28,6 +28,7 @@
     </filter>
 
     <php>
+        <const name="TEST" value="true"/>
         <const name="DS" value="/"/>
     </php>
 </phpunit>
