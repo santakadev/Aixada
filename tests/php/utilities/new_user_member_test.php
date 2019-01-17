@@ -18,6 +18,11 @@ final class new_user_member_test extends \PHPUnit\Framework\TestCase
         $this->createFamilyUnitWithId(2);
     }
 
+    protected function tearDown()
+    {
+        $this->db->close();
+    }
+
     /** @test */
     public function should_add_new_members_to_family_units()
     {
@@ -141,7 +146,7 @@ final class new_user_member_test extends \PHPUnit\Framework\TestCase
         $this->assertNull($userRow['last_login_attempt']);
         $this->assertNull($userRow['last_successful_login']);
         $this->assertNotNull($userRow['created_on']);
-        $this->assertGreaterThanOrEqual((int)date('U'), (new \DateTimeImmutable($userRow['created_on']))->getTimestamp());
+        $this->assertLessThanOrEqual((int)date('U'), (new \DateTimeImmutable($userRow['created_on']))->getTimestamp());
     }
 
     private function initializeDefaultDatabase()
