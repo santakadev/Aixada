@@ -72,12 +72,12 @@ final class Member
     /**
      * @var bool
      */
-    private $adult;
+    private $participant;
 
     /**
      * @var bool
      */
-    private $participant;
+    private $adult;
 
     /**
      * Member constructor.
@@ -94,10 +94,10 @@ final class Member
      * @param string $web
      * @param string $notes
      * @param bool $active
-     * @param bool $adult
      * @param bool $participant
+     * @param bool $adult
      */
-    public function __construct($id, $familyUnitId, $customMemberRef, $name, $nif, $address, $city, $zip, $phone1, $phone2, $web, $notes, $active, $adult, $participant)
+    public function __construct($id, $familyUnitId, $customMemberRef, $name, $nif, $address, $city, $zip, $phone1, $phone2, $web, $notes, $active, $participant, $adult)
     {
         $this->id = $id;
         $this->familyUnitId = $familyUnitId;
@@ -112,8 +112,8 @@ final class Member
         $this->web = $web;
         $this->notes = $notes;
         $this->active = $active;
-        $this->adult = $adult;
         $this->participant = $participant;
+        $this->adult = $adult;
     }
 
     /**
@@ -223,16 +223,16 @@ final class Member
     /**
      * @return bool
      */
-    public function adult()
+    public function participant()
     {
-        return $this->adult;
+        return $this->participant;
     }
 
     /**
      * @return bool
      */
-    public function participant()
+    public function adult()
     {
-        return $this->participant;
+        return $this->adult;
     }
 }
