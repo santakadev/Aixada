@@ -31,11 +31,13 @@ final class new_user_member_test extends \PHPUnit\Framework\TestCase
 
         $aNewMember = NewUserMemberArguments::anyOfFamilyUnit(FamilyUnitIdStub::ofId(1));
         $anotherNewMember = NewUserMemberArguments::anyOfFamilyUnit(FamilyUnitIdStub::ofId(2));
-        $this->addNewUserMember($aNewMember);
-        $this->addNewUserMember($anotherNewMember);
+        $resultAddANewMember = $this->addNewUserMember($aNewMember);
+        $resultAddAnotherNewMember = $this->addNewUserMember($anotherNewMember);
 
         $this->assertUserAndMemberSavedInDatabaseSuccessfully($initialDatabaseMaxId + 1, $aNewMember);
         $this->assertUserAndMemberSavedInDatabaseSuccessfully($initialDatabaseMaxId + 2, $anotherNewMember);
+        $this->assertNull($resultAddANewMember);
+        $this->assertNull($resultAddAnotherNewMember);
     }
 
     private function addNewUserMember(NewUserMemberArguments $newUserMemberArguments)
