@@ -60,8 +60,6 @@ function create_user_member($uf_id){
 	
 	if($login_exists) {
 		throw new Exception("The login '" .$params['login']. "' already exists. Please choose another one");
-		exit; 
-		
 	} else {
 		echo (new CreateMember())->__invoke([
             'new_user_member',
