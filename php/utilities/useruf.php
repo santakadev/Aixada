@@ -1,11 +1,13 @@
 <?php
 
+use Aixada\UseCase\CreateMember;
 
 require_once(__ROOT__ . 'php/inc/database.php');
 require_once(__ROOT__ . 'php/inc/authentication.inc.php');
 require_once(__ROOT__ . 'local_config/config.php');
 require_once ('general.php');
 require_once(__ROOT__ . 'local_config/lang/'.get_session_language() . '.php');
+require_once(__ROOT__ . 'src/UseCase/CreateMember.php');
 
 if (configuration_vars::get_instance()->development){
 	require_once(__ROOT__ . 'php/external/FirePHPCore/lib/FirePHPCore/FirePHP.class.php');
@@ -61,27 +63,28 @@ function create_user_member($uf_id){
 		exit; 
 		
 	} else {
-		echo do_stored_query('new_user_member', 
-				$params["login"],
-				$params["password"],
-				$uf_id,
-				$params["custom_member_ref"],
-				$params["name"],
-				$params["nif"],
-				$params["address"],
-				$params["city"],
-				$params["zip"],
-				$params["phone1"],
-				$params["phone2"],
-				$params["web"],
-				$params["notes"],
-				$params["active"],
-				$params["participant"],
-				$params["adult"],
-				$params["language"],
-				$params["gui_theme"],
-				$params["email"]	
-			);
+		echo (new CreateMember())->__invoke([
+            'new_user_member',
+            $params["login"],
+            $params["password"],
+            $uf_id,
+            $params["custom_member_ref"],
+            $params["name"],
+            $params["nif"],
+            $params["address"],
+            $params["city"],
+            $params["zip"],
+            $params["phone1"],
+            $params["phone2"],
+            $params["web"],
+            $params["notes"],
+            $params["active"],
+            $params["participant"],
+            $params["adult"],
+            $params["language"],
+            $params["gui_theme"],
+            $params["email"]
+        ]);
 	}
 }
 
