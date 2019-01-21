@@ -49,8 +49,7 @@ final class TransactionalCreateMember
     {
         $this->connection->start_transaction();
 
-        $nonTransactionalCreateMember = new CreateMember($this->members, $this->users);
-        $nonTransactionalCreateMember->__invoke($arguments);
+        (new CreateMember($this->members, $this->users))->__invoke($arguments);
 
         $this->connection->commit();
     }
