@@ -2,10 +2,12 @@
 
 namespace Aixada\Repository;
 
+require_once __DIR__ . '/UserRepository.php';
+
 use Aixada\Entity\User;
 use DBWrap;
 
-final class MySqlUserRepository
+final class MySqlUserRepository implements UserRepository
 {
     public function save(User $user)
     {

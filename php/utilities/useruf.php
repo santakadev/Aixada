@@ -1,6 +1,7 @@
 <?php
 
 use Aixada\Repository\MySqlMemberRepository;
+use Aixada\Repository\MySqlUserRepository;
 use Aixada\UseCase\CreateMember;
 
 require_once(__ROOT__ . 'php/inc/database.php');
@@ -9,6 +10,7 @@ require_once(__ROOT__ . 'local_config/config.php');
 require_once ('general.php');
 require_once(__ROOT__ . 'local_config/lang/'.get_session_language() . '.php');
 require_once(__ROOT__ . 'src/Repository/MySqlMemberRepository.php');
+require_once(__ROOT__ . 'src/Repository/MySqlUserRepository.php');
 require_once(__ROOT__ . 'src/UseCase/CreateMember.php');
 
 if (configuration_vars::get_instance()->development){
@@ -64,7 +66,7 @@ function create_user_member($uf_id){
 		throw new Exception("The login '" .$params['login']. "' already exists. Please choose another one");
 	}
 
-    (new CreateMember(new MySqlMemberRepository()))->__invoke([
+    (new CreateMember(new MySqlMemberRepository(), new MySqlUserRepository()))->__invoke([
         'new_user_member',
         $params["login"],
         $params["password"],

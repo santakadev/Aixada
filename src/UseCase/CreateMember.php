@@ -5,12 +5,12 @@ namespace Aixada\UseCase;
 require_once __ROOT__ . 'src/Entity/Member.php';
 require_once __ROOT__ . 'src/Entity/User.php';
 require_once __ROOT__ . 'src/Repository/MemberRepository.php';
-require_once __ROOT__ . 'src/Repository/MySqlUserRepository.php';
+require_once __ROOT__ . 'src/Repository/UserRepository.php';
 
 use Aixada\Entity\Member;
 use Aixada\Entity\User;
 use Aixada\Repository\MemberRepository;
-use Aixada\Repository\MySqlUserRepository;
+use Aixada\Repository\UserRepository;
 use DBWrap;
 
 final class CreateMember
@@ -21,7 +21,7 @@ final class CreateMember
     private $members;
 
     /**
-     * @var MySqlUserRepository
+     * @var UserRepository
      */
     private $users;
 
@@ -33,11 +33,12 @@ final class CreateMember
     /**
      * CreateMember constructor.
      * @param MemberRepository $members
+     * @param UserRepository $users
      */
-    public function __construct(MemberRepository $members)
+    public function __construct(MemberRepository $members, UserRepository $users)
     {
         $this->members = $members;
-        $this->users = new MySqlUserRepository();
+        $this->users = $users;
         $this->connection = DBWrap::get_instance();
     }
 
