@@ -60,30 +60,30 @@ function create_user_member($uf_id){
 	
 	if($login_exists) {
 		throw new Exception("The login '" .$params['login']. "' already exists. Please choose another one");
-	} else {
-		echo (new CreateMember())->__invoke([
-            'new_user_member',
-            $params["login"],
-            $params["password"],
-            $uf_id,
-            $params["custom_member_ref"],
-            $params["name"],
-            $params["nif"],
-            $params["address"],
-            $params["city"],
-            $params["zip"],
-            $params["phone1"],
-            $params["phone2"],
-            $params["web"],
-            $params["notes"],
-            $params["active"],
-            $params["participant"],
-            $params["adult"],
-            $params["language"],
-            $params["gui_theme"],
-            $params["email"]
-        ]);
 	}
+
+    echo (new CreateMember())->__invoke([
+        'new_user_member',
+        $params["login"],
+        $params["password"],
+        $uf_id,
+        $params["custom_member_ref"],
+        $params["name"],
+        $params["nif"],
+        $params["address"],
+        $params["city"],
+        $params["zip"],
+        $params["phone1"],
+        $params["phone2"],
+        $params["web"],
+        $params["notes"],
+        $params["active"],
+        $params["participant"],
+        $params["adult"],
+        $params["language"],
+        $params["gui_theme"],
+        $params["email"]
+    ]);
 }
 
 if (!defined('TEST')):
