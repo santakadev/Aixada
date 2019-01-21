@@ -61,9 +61,12 @@ final class useruf_test extends \PHPUnit\Framework\TestCase
             'email' => $newUserMemberArguments->email()
         ];
 
+        ob_start();
         create_user_member(self::A_FAMILY_UNIT_ID);
+        $output = ob_get_clean();
 
         $this->assertUserAndMemberSavedInDatabaseSuccessfully(2, $newUserMemberArguments);
+        $this->assertEmpty($output);
     }
 
     /** @test */

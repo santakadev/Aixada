@@ -62,7 +62,7 @@ function create_user_member($uf_id){
 		throw new Exception("The login '" .$params['login']. "' already exists. Please choose another one");
 	}
 
-    echo (new CreateMember())->__invoke([
+    (new CreateMember())->__invoke([
         'new_user_member',
         $params["login"],
         $params["password"],
