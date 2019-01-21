@@ -1,7 +1,9 @@
 <?php
 
+require_once(__ROOT__ . 'src/Repository/MySqlMemberRepository.php');
 require_once __ROOT__ . 'src/UseCase/CreateMember.php';
 
+use Aixada\Repository\MySqlMemberRepository;
 use Aixada\UseCase\CreateMember;
 
 /**
@@ -16,7 +18,7 @@ function do_stored_query()
 
     switch ($storedQueryArguments[0]) {
         case 'new_user_member':
-            (new CreateMember())->__invoke($storedQueryArguments);
+            (new CreateMember(new MySqlMemberRepository()))->__invoke($storedQueryArguments);
             break;
         default:
             $strSQL = prepare_stored_query($storedQueryArguments);

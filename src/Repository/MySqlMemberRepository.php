@@ -2,10 +2,12 @@
 
 namespace Aixada\Repository;
 
+require_once __DIR__ . '/MemberRepository.php';
+
 use Aixada\Entity\Member;
 use DBWrap;
 
-final class MySqlMemberRepository
+final class MySqlMemberRepository implements MemberRepository
 {
     public function save(Member $member)
     {
