@@ -56,15 +56,8 @@ function update_member($member_id){
  * @param unknown_type $uf_id
  */
 function create_user_member($uf_id){
-	
-	
+
 	$params = extract_user_form_values();
-	
-	$login_exists = validate_field('aixada_user', 'login', $params['login']);
-	
-	if($login_exists) {
-		throw new Exception("The login '" .$params['login']. "' already exists. Please choose another one");
-	}
 
     (new TransactionalCreateMember(new MySqlMemberRepository(), new MySqlUserRepository()))->__invoke([
         'new_user_member',

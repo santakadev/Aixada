@@ -75,10 +75,27 @@ final class useruf_test extends \PHPUnit\Framework\TestCase
         $this->expectException('\Exception');
         $this->expectExceptionMessage(sprintf("The login '%s' already exists. Please choose another one", self::USERNAME_IN_USE));
 
+        $newUserMemberArguments = NewUserMemberArguments::anyOfFamilyUnit(self::A_FAMILY_UNIT_ID);
         global $create_user_from_values_should_return;
         $create_user_from_values_should_return = [
-            'name' => 'name',
-            'login' => self::USERNAME_IN_USE
+            'name' => $newUserMemberArguments->memberName(),
+            'login' => self::USERNAME_IN_USE,
+            'password' => $newUserMemberArguments->password(),
+            'custom_member_ref' => $newUserMemberArguments->custom_member_ref(),
+            'nif' => $newUserMemberArguments->nif(),
+            'address' => $newUserMemberArguments->address(),
+            'city' => $newUserMemberArguments->city(),
+            'zip' => $newUserMemberArguments->zip(),
+            'phone1' => $newUserMemberArguments->phone1(),
+            'phone2' => $newUserMemberArguments->phone2(),
+            'web' => $newUserMemberArguments->web(),
+            'notes' => $newUserMemberArguments->notes(),
+            'active' => (int)$newUserMemberArguments->active(),
+            'participant' => (int)$newUserMemberArguments->participant(),
+            'adult' => (int)$newUserMemberArguments->adult(),
+            'language' => $newUserMemberArguments->language(),
+            'gui_theme' => $newUserMemberArguments->guiTheme(),
+            'email' => $newUserMemberArguments->email()
         ];
 
         create_user_member(self::A_FAMILY_UNIT_ID);

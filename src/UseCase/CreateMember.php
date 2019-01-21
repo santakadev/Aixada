@@ -6,6 +6,7 @@ require_once __ROOT__ . 'src/Entity/Member.php';
 require_once __ROOT__ . 'src/Entity/User.php';
 require_once __ROOT__ . 'src/Repository/MemberRepository.php';
 require_once __ROOT__ . 'src/Repository/UserRepository.php';
+require_once __ROOT__ . 'php/utilities/useruf.php';
 
 use Aixada\Entity\Member;
 use Aixada\Entity\User;
@@ -41,11 +42,22 @@ final class CreateMember
      */
     public function __invoke($arguments)
     {
+        $this->assertUsernameNotInUse($arguments[1]);
+
         $newId = $this->members->nextId();
 
         $this->members->save($this->memberFromArguments($arguments, $newId));
 
         $this->users->save($this->userFromArguments($arguments, $newId));
+    }
+
+    private function assertUsernameNotInUse($username)
+    {
+        $login_exists = validate_field('aixada_user', 'login', $username);
+
+        if($login_exists) {
+            throw new \Exception("The login '" .$username. "' already exists. Please choose another one");
+        }
     }
 
     /**
