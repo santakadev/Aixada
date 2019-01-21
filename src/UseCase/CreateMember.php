@@ -53,7 +53,7 @@ final class CreateMember
      * @param $id
      * @return Member
      */
-    public function memberFromArguments($arguments, $id)
+    private function memberFromArguments($arguments, $id)
     {
         return new Member(
             $id,
@@ -80,7 +80,7 @@ final class CreateMember
      * @return User
      * @throws \Exception
      */
-    public function userFromArguments($arguments, $id)
+    private function userFromArguments($arguments, $id)
     {
         return new User(
             $id,
@@ -99,7 +99,7 @@ final class CreateMember
     /**
      * @return array
      */
-    public function defaultRoles()
+    private function defaultRoles()
     {
         return ['Checkout', 'Consumer'];
     }
@@ -108,7 +108,7 @@ final class CreateMember
      * @return \DateTimeImmutable
      * @throws \Exception
      */
-    public function now()
+    private function now()
     {
         return new \DateTimeImmutable();
     }
