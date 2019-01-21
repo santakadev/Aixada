@@ -11,7 +11,6 @@ use Aixada\Entity\Member;
 use Aixada\Entity\User;
 use Aixada\Repository\MemberRepository;
 use Aixada\Repository\UserRepository;
-use DBWrap;
 
 final class CreateMember
 {
@@ -26,11 +25,6 @@ final class CreateMember
     private $users;
 
     /**
-     * @var DBWrap
-     */
-    private $connection;
-
-    /**
      * CreateMember constructor.
      * @param MemberRepository $members
      * @param UserRepository $users
@@ -39,7 +33,6 @@ final class CreateMember
     {
         $this->members = $members;
         $this->users = $users;
-        $this->connection = DBWrap::get_instance();
     }
 
     /**
@@ -48,15 +41,11 @@ final class CreateMember
      */
     public function __invoke($arguments)
     {
-        $this->connection->start_transaction();
-
         $newId = $this->members->nextId();
 
         $this->members->save($this->memberFromArguments($arguments, $newId));
 
         $this->users->save($this->userFromArguments($arguments, $newId));
-
-        $this->connection->commit();
     }
 
     /**
