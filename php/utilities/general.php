@@ -14,7 +14,7 @@ function get_session_user_id() {
 	if (isset($_SESSION['userdata']['user_id']) && $_SESSION['userdata']['user_id'] > 0 ) {
 		return $_SESSION['userdata']['user_id'];
 	} else {
-		throw new Exception("$_Session data user_id is not set!! ");
+		throw new Exception('$_Session data user_id is not set!! ');
 	}
 }
 
@@ -28,7 +28,7 @@ function get_session_uf_id() {
 	if (isset($_SESSION['userdata']['uf_id']) && $_SESSION['userdata']['uf_id'] > 0 ) {
 		return $_SESSION['userdata']['uf_id'];
 	} else {
-		throw new Exception("$_Session data uf_id is not set!! ");
+		throw new Exception('$_Session data uf_id is not set!! ');
 	}
 }
 
@@ -42,7 +42,7 @@ function get_session_member_id() {
 	if (isset($_SESSION['userdata']['member_id']) && $_SESSION['userdata']['member_id'] > 0 ) {
 		return $_SESSION['userdata']['member_id'];
 	} else {
-		throw new Exception("$_Session data member_id is not set!! ");
+		throw new Exception('$_Session data member_id is not set!! ');
 	}	
 }
 
