@@ -103,9 +103,10 @@ function get_current_role()
 /**
  * 
  * Provides some basic logic to retrieve values from URL parameters. 
- * @param str $param_name the name of the parameter passed along 
- * @param $default a default value. if the parameter is not set, the default value will be used
- * @param str $transform basic string transforms applied to the value of the parameter
+ * @param string $param_name the name of the parameter passed along
+ * @param mixed $default a default value. if the parameter is not set, the default value will be used
+ * @param string $transform basic string transforms applied to the value of the parameter
+ * @return string|mixed
  * @throws Exception
  */
 function get_param($param_name, $default=null, $transform = '') {
