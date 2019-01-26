@@ -118,15 +118,11 @@ function get_param($param_name, $default = null, $transform = '') {
         throw new Exception("get_param: Parameter: {$param_name} has no value and no default value");
     }
 
-	if (isset($_REQUEST[$param_name])) {
-		$value = $_REQUEST[$param_name];
-		if (($value == '' || $value == 'undefined') && isset($default)) {
-			$value = $default;
-		}
-
-	} else if ($default !== null) {
-		$value= $default;
-	}
+    if (isset($_REQUEST[$param_name]) && !in_array($_REQUEST[$param_name], ['', 'undefined'])) {
+        $value = $_REQUEST[$param_name];
+    } else {
+        $value = $default;
+    }
 
 	//utility hack to retrieve uf_id or user_id from session. e.g. &uf_id=-1
     if (in_array($param_name, ['uf_id', 'user_id', 'member_id']) && $value == -1) {
