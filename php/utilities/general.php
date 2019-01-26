@@ -109,19 +109,23 @@ function get_current_role()
  * @return string|mixed
  * @throws Exception
  */
-function get_param($param_name, $default=null, $transform = '') {
+function get_param($param_name, $default = null, $transform = '') {
+    if (!isset($_REQUEST[$param_name]) && is_null($default)) {
+        throw new Exception("get_param: Missing or wrong parameter name: {$param_name} in URL");
+    }
+
+    if (isset($_REQUEST[$param_name]) && is_null($default) && in_array($_REQUEST[$param_name], ['', 'undefined'])) {
+        throw new Exception("get_param: Parameter: {$param_name} has no value and no default value");
+    }
+
 	if (isset($_REQUEST[$param_name])) {
 		$value = $_REQUEST[$param_name];
 		if (($value == '' || $value == 'undefined') && isset($default)) {
 			$value = $default;
-		} else if (($value == '' || $value == 'undefined') && !isset($default)) {
-			throw new Exception("get_param: Parameter: {$param_name} has no value and no default value");
-		}	
-			
-	} else if (isset($default) and $default !== null) {
+		}
+
+	} else if ($default !== null) {
 		$value= $default;
-	} else {
-		throw new Exception("get_param: Missing or wrong parameter name: {$param_name} in URL");
 	}
 
 	//utility hack to retrieve uf_id or user_id from session. e.g. &uf_id=-1
