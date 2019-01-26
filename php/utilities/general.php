@@ -110,8 +110,6 @@ function get_current_role()
  * @throws Exception
  */
 function get_param($param_name, $default=null, $transform = '') {
-	$value; 
-
 	if (isset($_REQUEST[$param_name])) {
 		$value = $_REQUEST[$param_name];
 		if (($value == '' || $value == 'undefined') && isset($default)) {
@@ -125,39 +123,35 @@ function get_param($param_name, $default=null, $transform = '') {
 	} else {
 		throw new Exception("get_param: Missing or wrong parameter name: {$param_name} in URL");
 	}
-	
+
 	//utility hack to retrieve uf_id or user_id from session. e.g. &uf_id=-1
-	if ($param_name == "uf_id" && $value==-1) {
-		$value = get_session_uf_id();	
-	} else if ($param_name == "user_id" && $value==-1) {
-		$value = get_session_user_id();
-	} else if ($param_name == "member_id" && $value==-1) {
-		$value = get_session_member_id();
-	}
+    if (in_array($param_name, ['uf_id', 'user_id', 'member_id']) && $value == -1) {
+        $value = get_user_data_from_session($param_name);
+    }
 	
-	
+	if (empty($transform)) {
+	    return $value;
+    }
+
 	switch ($transform) {
 		case 'lowercase':
-			$value = strtolower($value);
-			break;
-			
-		case '':
-			$value = $value; 
-			break;
-		
+			return strtolower($value);
+
 		case 'array2String':
-			$str = "";
-			foreach ($value as $v) {
-				$str .= $v.",";
-			}
-			$value = rtrim($str,",");
-			break;
-			
+			return implode(',', $value);
+
 		default: 
 			throw new Exception("get_param: transform '{$transform}' on URL parameter not supported. ");
-			break;
 	}
-	return $value;
+}
+
+function get_user_data_from_session($param_name)
+{
+    if (isset($_SESSION['userdata'][$param_name]) && $_SESSION['userdata'][$param_name] > 0 ) {
+        return $_SESSION['userdata'][$param_name];
+    } else {
+        throw new Exception(sprintf('$_Session data %s is not set!! ', $param_name));
+    }
 }
 
 /**
